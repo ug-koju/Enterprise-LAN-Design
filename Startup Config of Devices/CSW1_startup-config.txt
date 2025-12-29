@@ -1,0 +1,196 @@
+!
+version 12.2(37)SE1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Core-SW1
+!
+!
+enable secret 5 $1$mERr$NJdjwh5wX8Ia/X8aC4RIu.
+!
+!
+!
+!
+!
+ip routing
+!
+!
+!
+!
+username admin secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name spidey.local
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.10.1 255.255.255.255
+!
+interface Port-channel1
+!
+interface FastEthernet0/1
+ no switchport
+ ip address 192.168.10.17 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/2
+ no switchport
+ ip address 192.168.10.25 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/3
+ no switchport
+ ip address 192.168.10.33 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/4
+ no switchport
+ ip address 192.168.10.41 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/5
+ no switchport
+ ip address 192.168.10.49 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/6
+ no switchport
+ ip address 192.168.10.57 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/7
+ no switchport
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/8
+ no switchport
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/9
+ no switchport
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/10
+ no switchport
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/11
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface FastEthernet0/12
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface FastEthernet0/13
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface FastEthernet0/14
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 192.168.10.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ no switchport
+ ip address 192.168.10.6 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 11.11.11.11
+ log-adjacency-changes
+ network 192.168.10.0 0.0.0.255 area 0
+ network 172.16.10.1 0.0.0.0 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+ip access-list standard SSH-ACCESS
+ permit 192.168.30.0 0.0.0.127
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+!
+!
+!
+!
+end
+

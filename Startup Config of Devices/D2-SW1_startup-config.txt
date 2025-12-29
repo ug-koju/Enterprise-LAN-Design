@@ -1,0 +1,242 @@
+!
+version 12.2(37)SE1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname D2-SW1
+!
+!
+enable secret 5 $1$mERr$NJdjwh5wX8Ia/X8aC4RIu.
+!
+!
+!
+!
+!
+ip routing
+!
+!
+!
+!
+username admin secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name spidey.local
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.20.3 255.255.255.255
+!
+interface FastEthernet0/1
+ no switchport
+ ip address 192.168.10.34 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/2
+ no switchport
+ ip address 192.168.10.38 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/3
+ switchport access vlan 50
+ switchport trunk allowed vlan 50,60,70,300
+ switchport mode dynamic desirable
+!
+interface FastEthernet0/4
+ switchport access vlan 60
+ switchport trunk allowed vlan 50,60,70,300
+ switchport mode dynamic desirable
+!
+interface FastEthernet0/5
+ switchport access vlan 70
+ switchport trunk allowed vlan 50,60,70,300
+ switchport mode dynamic desirable
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan50
+ mac-address 00e0.f993.e701
+ ip address 192.168.50.2 255.255.255.128
+ ip helper-address 192.168.20.11
+ ip access-group SALES-DEPT in
+ standby version 2
+ standby 1 ip 192.168.50.1
+ standby 1 priority 101
+ standby 1 preempt
+!
+interface Vlan60
+ mac-address 00e0.f993.e702
+ ip address 192.168.60.2 255.255.255.128
+ ip helper-address 192.168.20.11
+ ip access-group MARKETING-DEPT in
+ standby version 2
+ standby 2 ip 192.168.60.1
+!
+interface Vlan70
+ mac-address 00e0.f993.e703
+ ip address 192.168.70.2 255.255.255.128
+ ip helper-address 192.168.20.11
+ ip access-group PR-DEPT in
+ standby version 2
+ standby 3 ip 192.168.70.1
+ standby 3 priority 101
+ standby 3 preempt
+!
+interface Vlan300
+ mac-address 00e0.f993.e704
+ ip address 172.16.30.66 255.255.255.192
+ standby version 2
+ standby 4 ip 172.16.30.65
+ standby 4 priority 101
+!
+router ospf 1
+ router-id 3.3.3.3
+ log-adjacency-changes
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.50.0 0.0.0.127 area 0
+ network 192.168.60.0 0.0.0.127 area 0
+ network 192.168.70.0 0.0.0.127 area 0
+ network 172.16.20.3 0.0.0.0 area 0
+ network 172.16.30.64 0.0.0.63 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+ip access-list standard SSH-ACCESS
+ permit 192.168.30.0 0.0.0.127
+ip access-list extended SALES-DEPT
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.12 eq www
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.13 eq www
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.15 eq www
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.16 eq www
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.17 eq www
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.18 eq www
+ permit tcp 192.168.50.0 0.0.0.127 host 192.168.20.19 eq www
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.12
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.13
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.15
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.16
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.17
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.18
+ deny ip 192.168.50.0 0.0.0.127 host 192.168.20.19
+ permit ip any any
+ip access-list extended MARKETING-DEPT
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.12 eq www
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.13 eq www
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.14 eq www
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.16 eq www
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.17 eq www
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.18 eq www
+ permit tcp 192.168.60.0 0.0.0.127 host 192.168.20.19 eq www
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.12
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.13
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.14
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.16
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.17
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.18
+ deny ip 192.168.60.0 0.0.0.127 host 192.168.20.19
+ permit ip any any
+ip access-list extended PR-DEPT
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.12 eq www
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.13 eq www
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.14 eq www
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.15 eq www
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.17 eq www
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.18 eq www
+ permit tcp 192.168.70.0 0.0.0.127 host 192.168.20.19 eq www
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.12
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.13
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.14
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.15
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.17
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.18
+ deny ip 192.168.70.0 0.0.0.127 host 192.168.20.19
+ permit ip any any
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+!
+!
+!
+!
+end
+
